@@ -36,24 +36,37 @@ function switchPlayer() {
         return 'X'
     }
 }
+function markWinner(winningArray) {
+    winningArray.forEach(function(winningCell){
+        winningCell.className = 'winning'
+    })
+}
+
+function stopPlay(cellArray) {
+    cellArray.forEach(function (cell) {
+        cell.removeEventListener('click', fillSquare)
+    })
+}
+
+function removeFillSquare(event) {
+    event.target.removeEventListener('click', fillSquare)
+}
 
 function fillSquare(event) {
     event.target.textContent = playerTurn.textContent
     for (let combo of Object.values(winCondition)) {
         if (combo[0].textContent === '') {
+            
         } else if (combo[0].textContent === combo[1].textContent && combo[0].textContent === combo[2].textContent) {
-            winnerTitle.textContent = 'The Winner is: ' + playerTurn.textContent + '!'
-            combo.forEach(function(winningCell){
-                winningCell.className = 'winning'
-            })
 
-            cellArray.forEach(function (cell) {
-                cell.removeEventListener('click', fillSquare)
-            })
+            winnerTitle.textContent = 'The Winner is: ' + playerTurn.textContent + '!'
+
+            markWinner(combo)
+            stopPlay(cellArray)
         }
     }
     playerTurn.textContent = switchPlayer()
-    event.target.removeEventListener('click', fillSquare)
+    removeFillSquare(event)
 }
 
 /*--------------Event Listener Functions--------------*/
@@ -61,8 +74,8 @@ function fillSquare(event) {
 startGame.addEventListener('click',
     function () {
         startGame.disabled = true;
-        cellArray.forEach(function (cell) {
-            cell.addEventListener('click', fillSquare)
+        cellArray.forEach(function (eachCell) {
+            eachCell.addEventListener('click', fillSquare)
         })
         playerTurn.textContent = 'X'
 
@@ -71,15 +84,13 @@ startGame.addEventListener('click',
 restartGame.addEventListener('click',
     function () {
         startGame.disabled = false;
-        cellArray.forEach(function (cell) {
-            cell.textContent = ''
+        cellArray.forEach(function (cellText) {
+            cellText.textContent = ''
         })
-        cellArray.forEach(function(cell){
-            cell.className = ''
+        cellArray.forEach(function(cellClass){
+            cellClass.className = ''
         })
-        cellArray.forEach(function (cell) {
-            cell.removeEventListener('click', fillSquare)
-        })
+        removeFillSquare(event)
         playerTurn.textContent = ''
         winnerTitle.textContent = ''
     })
