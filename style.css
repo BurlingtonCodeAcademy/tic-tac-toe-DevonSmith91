@@ -59,3 +59,7 @@ div.board {
 #turnStatus {
   font-size: 14px
 }
+
+.winning {
+  color: red;
+}

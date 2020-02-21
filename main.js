@@ -2,6 +2,7 @@
 let startGame = document.getElementById('start')
 let restartGame = document.getElementById('restart')
 let playerTurn = document.getElementById('turnStatus')
+let winnerTitle = document.getElementById('winner')
 let cellOne = document.getElementById('cell-1')
 let cellTwo = document.getElementById('cell-2')
 let cellThree = document.getElementById('cell-3')
@@ -38,18 +39,20 @@ function switchPlayer() {
 
 function fillSquare(event) {
     event.target.textContent = playerTurn.textContent
-    playerTurn.textContent = switchPlayer()
     for (let combo of Object.values(winCondition)) {
-        console.log(combo)
         if (combo[0].textContent === '') {
-            
         } else if (combo[0].textContent === combo[1].textContent && combo[0].textContent === combo[2].textContent) {
+            winnerTitle.textContent = 'The Winner is: ' + playerTurn.textContent + '!'
+            combo.forEach(function(winningCell){
+                winningCell.className = 'winning'
+            })
+
             cellArray.forEach(function (cell) {
                 cell.removeEventListener('click', fillSquare)
             })
-            console.log('is this working?!')
         }
     }
+    playerTurn.textContent = switchPlayer()
     event.target.removeEventListener('click', fillSquare)
 }
 
@@ -71,25 +74,20 @@ restartGame.addEventListener('click',
         cellArray.forEach(function (cell) {
             cell.textContent = ''
         })
+        cellArray.forEach(function(cell){
+            cell.className = ''
+        })
         cellArray.forEach(function (cell) {
             cell.removeEventListener('click', fillSquare)
         })
         playerTurn.textContent = ''
+        winnerTitle.textContent = ''
     })
 
 
 
 
 /*---------------------Win Condition?---------*/
-
-// if (cellOne.textContent === cellTwo.textContent && cellOne.textContent === cellThree.textContent) {
-
-// }
-
-
-
-
-
 
 // function sayMagicWord(event) {
 //         if (event.target === prestoButton) { //event.target will focus on what is being clicked on!
