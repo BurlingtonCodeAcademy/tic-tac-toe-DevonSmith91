@@ -1,8 +1,19 @@
 /*----------------Variables----------------*/
-let startGame = document.getElementById('start')
+let onePlayerStart = document.getElementById('onePlayer')
+let twoPlayerStart = document.getElementById('twoPlayer')
 let restartGame = document.getElementById('restart')
-let playerTurn = document.getElementById('turnStatus')
+let playerTurnDiv = document.getElementById('playerTurn')
+let playerInputDiv = document.getElementById('playerInput')
+let whoseTurnIsIt = document.getElementById('turnStatus')
 let winnerTitle = document.getElementById('winner')
+let playerName = document.getElementById('playerName')
+let acceptPlayerNameOne = document.getElementById('acceptOne')
+let acceptPlayerNameTwo = document.getElementById('acceptTwo')
+let playerInputOption = document.getElementById('whichPlayer')
+
+let playerOne = 'X'
+let playerTwo = 'O'
+
 let cellOne = document.getElementById('cell-1')
 let cellTwo = document.getElementById('cell-2')
 let cellThree = document.getElementById('cell-3')
@@ -30,14 +41,14 @@ let winCondition = {
 /*-----------------Functions-------------------------*/
 
 function switchPlayer() {
-    if (playerTurn.textContent === 'X') {
-        return 'O'
-    } else if (playerTurn.textContent === 'O') {
-        return 'X'
+    if (whoseTurnIsIt.textContent === playerOne) {
+        return playerTwo
+    } else if (whoseTurnIsIt.textContent === playerTwo) {
+        return playerOne
     }
 }
 function markWinner(winningArray) {
-    winningArray.forEach(function(winningCell){
+    winningArray.forEach(function (winningCell) {
         winningCell.className = 'winning'
     })
 }
@@ -53,45 +64,74 @@ function removeFillSquare(event) {
 }
 
 function fillSquare(event) {
-    event.target.textContent = playerTurn.textContent
+    if (whoseTurnIsIt.textContent === playerOne) {
+        event.target.textContent = 'X'
+    } else {
+        event.target.textContent = 'O'
+    }
     for (let combo of Object.values(winCondition)) {
         if (combo[0].textContent === '') {
-            
+
         } else if (combo[0].textContent === combo[1].textContent && combo[0].textContent === combo[2].textContent) {
 
-            winnerTitle.textContent = 'The Winner is: ' + playerTurn.textContent + '!'
+            winnerTitle.textContent = 'The Winner is: ' + whoseTurnIsIt.textContent + '!'
 
             markWinner(combo)
             stopPlay(cellArray)
         }
     }
-    playerTurn.textContent = switchPlayer()
+    whoseTurnIsIt.textContent = switchPlayer()
     removeFillSquare(event)
 }
 
+
 /*--------------Event Listener Functions--------------*/
 
-startGame.addEventListener('click',
+
+twoPlayerStart.addEventListener('click',
     function () {
-        startGame.disabled = true;
-        cellArray.forEach(function (eachCell) {
-            eachCell.addEventListener('click', fillSquare)
-        })
-        playerTurn.textContent = 'X'
+        playerInputDiv.hidden = false
+        acceptPlayerNameTwo.hidden = true
+        onePlayerStart.disabled = true;
+        twoPlayerStart.disabled = true;
+    })
+
+acceptPlayerNameOne.addEventListener('click',
+    function () {
+        playerInputOption.textContent = 'Two'
+        playerOne = playerName.value
+        console.log(playerOne)
+        playerName.value = ''
+        acceptPlayerNameTwo.hidden = false
+        acceptPlayerNameOne.hidden = true
 
     })
 
+acceptPlayerNameTwo.addEventListener('click',
+    function () {
+        playerTwo = playerName.value
+        cellArray.forEach(function (eachCell) {
+            eachCell.addEventListener('click', fillSquare)
+        })
+        console.log(playerTwo)
+        playerTurnDiv.hidden = false
+        playerInputDiv.hidden = true
+        whoseTurnIsIt.textContent = playerOne
+    })
+
+
 restartGame.addEventListener('click',
     function () {
-        startGame.disabled = false;
+        onePlayerStart.disabled = false;
+        twoPlayerStart.disabled = false;
         cellArray.forEach(function (cellText) {
             cellText.textContent = ''
         })
-        cellArray.forEach(function(cellClass){
+        cellArray.forEach(function (cellClass) {
             cellClass.className = ''
         })
         removeFillSquare(event)
-        playerTurn.textContent = ''
+        whoseTurnIsIt.textContent = ''
         winnerTitle.textContent = ''
     })
 
@@ -99,6 +139,13 @@ restartGame.addEventListener('click',
 
 
 /*---------------------Win Condition?---------*/
+playerTurnDiv.hidden = true
+playerInputDiv.hidden = true
+
+
+
+
+
 
 // function sayMagicWord(event) {
 //         if (event.target === prestoButton) { //event.target will focus on what is being clicked on!

@@ -12,7 +12,14 @@
 <body>
   <h2>Tic Tac Toe</h2>
   <h3 id='winner'></h3>
-  <p>Player Turn: <span id='turnStatus'></span></p>
+  <div id='playerInput'>
+    <label for="playerName">Player <span id="whichPlayer" >One</span> Name:</label>
+    <input type="text" id="playerName" name="fname">
+    <button id="acceptOne" type="button">Accept</button><button id="acceptTwo" type="button">Accept</button>
+  </div>
+  <div id='playerTurn'>
+    <p>Player Turn: <span id='turnStatus'></span></p>
+  </div>
   <div class="board">
     <div id="row-1">
       <div id="cell-1"></div>
@@ -32,7 +39,8 @@
   </div>
 
   <div class="status">
-    <button id="start" type="button">Start Game</button>
+    <button id="onePlayer" type="button">One Player</button>
+    <button id="twoPlayer" type="button">Two Player</button>
     <br />
     <button id="restart" type="button">Restart</button>
   </div>

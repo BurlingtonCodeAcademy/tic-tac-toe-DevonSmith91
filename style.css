@@ -57,7 +57,11 @@ div.board {
 }
 
 #turnStatus {
-  font-size: 14px
+  font-size: 16px
+}
+
+#whichPlayer {
+  font-size: 16px
 }
 
 .winning {
