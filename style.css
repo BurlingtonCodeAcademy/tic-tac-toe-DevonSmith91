@@ -67,3 +67,10 @@ div.board {
 .winning {
   color: red;
 }
+
+button:hover{
+  cursor: pointer;
+}
+#timer{
+  font-size: 16px;
+}

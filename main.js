@@ -11,9 +11,12 @@ let acceptPlayerNameOne = document.getElementById('acceptOne')
 let acceptPlayerNameTwo = document.getElementById('acceptTwo')
 let playerInputOption = document.getElementById('whichPlayer')
 
+let seconds = 0
+let gameTimer = document.getElementById('timer')
+let timerDiv = document.getElementById('timerDiv')
+
 let playerOne = 'X'
 let playerTwo = 'O'
-
 let cellOne = document.getElementById('cell-1')
 let cellTwo = document.getElementById('cell-2')
 let cellThree = document.getElementById('cell-3')
@@ -47,6 +50,7 @@ function switchPlayer() {
         return playerOne
     }
 }
+
 function markWinner(winningArray) {
     winningArray.forEach(function (winningCell) {
         winningCell.className = 'winning'
@@ -75,7 +79,7 @@ function fillSquare(event) {
         } else if (combo[0].textContent === combo[1].textContent && combo[0].textContent === combo[2].textContent) {
 
             winnerTitle.textContent = 'The Winner is: ' + whoseTurnIsIt.textContent + '!'
-
+            clearInterval(secondCounter)
             markWinner(combo)
             stopPlay(cellArray)
         }
@@ -83,6 +87,19 @@ function fillSquare(event) {
     whoseTurnIsIt.textContent = switchPlayer()
     removeFillSquare(event)
 }
+
+function incrementSeconds(){
+    if(twoPlayerStart.disabled === true) {
+        seconds += 1
+        gameTimer.textContent = seconds
+    } else {
+        seconds = 0
+        gameTimer.textContent = seconds
+    }
+
+}
+
+
 
 
 /*--------------Event Listener Functions--------------*/
@@ -92,6 +109,7 @@ twoPlayerStart.addEventListener('click',
     function () {
         playerInputDiv.hidden = false
         acceptPlayerNameTwo.hidden = true
+        acceptPlayerNameOne.hidden = false
         onePlayerStart.disabled = true;
         twoPlayerStart.disabled = true;
     })
@@ -116,6 +134,8 @@ acceptPlayerNameTwo.addEventListener('click',
         console.log(playerTwo)
         playerTurnDiv.hidden = false
         playerInputDiv.hidden = true
+        timerDiv.hidden = false
+        secondCounter = setInterval(incrementSeconds, 1000)
         whoseTurnIsIt.textContent = playerOne
     })
 
@@ -124,6 +144,9 @@ restartGame.addEventListener('click',
     function () {
         onePlayerStart.disabled = false;
         twoPlayerStart.disabled = false;
+        playerTurnDiv.hidden = true;
+        playerInputDiv.hidden = true;
+        timerDiv.hidden = true
         cellArray.forEach(function (cellText) {
             cellText.textContent = ''
         })
@@ -131,16 +154,20 @@ restartGame.addEventListener('click',
             cellClass.className = ''
         })
         removeFillSquare(event)
+        seconds = 0
+        gameTimer.textContent = seconds
         whoseTurnIsIt.textContent = ''
         winnerTitle.textContent = ''
+        playerName.value = ''
     })
 
 
 
 
-/*---------------------Win Condition?---------*/
+/*---------------------------????-----------------------------*/
 playerTurnDiv.hidden = true
 playerInputDiv.hidden = true
+timerDiv.hidden = true
 
 
 
