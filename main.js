@@ -70,12 +70,12 @@ function declareWinner() {
             markWinner(combo)
             stopPlay(cellArray)
             
-        }   
-    } drawCondition()
+        }
+    }   drawCondition()
 }
 // function to find draw condition
 function drawCondition(){
-    if (usedCellArray.length === 9) {
+    if (usedCellArray.length === 9 && !winnerTitle.textContent.includes('The Winner is: ')) {
         winnerTitle.textContent = 'It looks like a Draw!!'
         playerTurnDiv.hidden = true;
         clearInterval(secondCounter)
@@ -154,7 +154,7 @@ function incrementSeconds() {
 function computer() {
     if (winnerTitle.textContent !== '') {
     }
-    if (usedCellArray.length === 9){
+    if (usedCellArray.length === 9 && !winnerTitle.textContent.includes('The Winner is: ')) {
         winnerTitle.textContent = 'It looks like a Draw!!'
         playerTurnDiv.hidden = true;
         clearInterval(secondCounter)
@@ -275,6 +275,7 @@ restartGame.addEventListener('click',
             whoseTurnIsIt.textContent = ''
             winnerTitle.textContent = ''
             playerName.value = ''
+            usedCellArray = []
         }
         // if game isnt started, clicking this will do nothing
         else { }
