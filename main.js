@@ -55,24 +55,27 @@ function markWinner(winningArray) {
     })
 }
 
-function declareWinner(){
+function declareWinner() {
     for (let combo of Object.values(winCondition)) {
         if (combo[0].textContent === '') {
 
         } else if (combo[0].textContent === combo[1].textContent && combo[0].textContent === combo[2].textContent) {
-
             winnerTitle.textContent = 'The Winner is: ' + whoseTurnIsIt.textContent + '!'
             playerTurnDiv.hidden = true;
             clearInterval(secondCounter)
             markWinner(combo)
             stopPlay(cellArray)
         } else {
-            return
+
         }
     }
 }
 
-function drawCondition(drawArray) {
+function drawCondition(cellArray) {
+    cellArray.forEach(function (eachCell) {
+        if (eachCell.textContent !== '')
+            console.log('it\'s a draw!')
+    })
 
 }
 
@@ -93,19 +96,28 @@ function stopPlay(cellArray) {
     })
 }
 
-
-
 function removeFillSquare(event) {
     event.target.removeEventListener('click', fillSquare)
 }
 
 function fillSquare(event) {
     if (whoseTurnIsIt.textContent === playerOne) {
-        event.target.textContent = 'X'
+          while (whoseTurnIsIt.textContent === playerOne) {
+            if (event.target.textContent ==='') {
+                event.target.textContent = 'X'
+                break;
+            } else {
+                return whoseTurnIsIt.textContent === playerOne
+            }
+        } 
+
         if (whoseTurnIsIt.textContent === playerOne && playerTwo === 'Computer') {
+            declareWinner()
             computer()
             whoseTurnIsIt.textContent = switchPlayer()
+            return
         }
+
     } else if (whoseTurnIsIt.textContent === playerTwo) {
         event.target.textContent = 'O'
     }
@@ -124,14 +136,17 @@ function incrementSeconds() {
 }
 
 function computer() {
-    if (playerTwo === 'Computer') {
+    if (winnerTitle.textContent !== '') {
+    }
+    
+    else if (playerTwo === 'Computer') {
         let compPick = cellArray[Math.floor(Math.random() * cellArray.length)]
         while (compPick.textContent !== '') {
             compPick = cellArray[Math.floor(Math.random() * cellArray.length)]
             console.log(compPick)
         }
         compPick.textContent = 'O'
-        switchPlayer()
+        whoseTurnIsIt.textContent = switchPlayer()
         console.log(compPick)
     }
 }
@@ -154,7 +169,7 @@ onePlayerStart.addEventListener('click',
                 startPlay(cellArray)
                 playerTwo = 'Computer'
             })
-        
+
     })
 
 twoPlayerStart.addEventListener('click',
@@ -214,7 +229,7 @@ restartGame.addEventListener('click',
                 cellClass.className = ''
             })
             removeFillSquare(event)
-            seconds = 0
+            seconds = 00
             gameTimer.textContent = seconds
             clearInterval(secondCounter)
             whoseTurnIsIt.textContent = ''
