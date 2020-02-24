@@ -10,11 +10,9 @@ let playerName = document.getElementById('playerName')
 let acceptPlayerNameOne = document.getElementById('acceptOne')
 let acceptPlayerNameTwo = document.getElementById('acceptTwo')
 let playerInputOption = document.getElementById('whichPlayer')
-
-let seconds = 0
 let gameTimer = document.getElementById('timer')
 let timerDiv = document.getElementById('timerDiv')
-
+let seconds = 0
 let playerOne = 'X'
 let playerTwo = 'O'
 let cellOne = document.getElementById('cell-1')
@@ -57,11 +55,45 @@ function markWinner(winningArray) {
     })
 }
 
+function declareWinner(){
+    for (let combo of Object.values(winCondition)) {
+        if (combo[0].textContent === '') {
+
+        } else if (combo[0].textContent === combo[1].textContent && combo[0].textContent === combo[2].textContent) {
+
+            winnerTitle.textContent = 'The Winner is: ' + whoseTurnIsIt.textContent + '!'
+            playerTurnDiv.hidden = true;
+            clearInterval(secondCounter)
+            markWinner(combo)
+            stopPlay(cellArray)
+        } else {
+            return
+        }
+    }
+}
+
+function drawCondition(drawArray) {
+
+}
+
+function startPlay(cellArray) {
+    cellArray.forEach(function (eachCell) {
+        eachCell.addEventListener('click', fillSquare)
+    })
+    playerTurnDiv.hidden = false
+    playerInputDiv.hidden = true
+    timerDiv.hidden = false
+    secondCounter = setInterval(incrementSeconds, 1000)
+    whoseTurnIsIt.textContent = playerOne
+}
+
 function stopPlay(cellArray) {
     cellArray.forEach(function (cell) {
         cell.removeEventListener('click', fillSquare)
     })
 }
+
+
 
 function removeFillSquare(event) {
     event.target.removeEventListener('click', fillSquare)
@@ -70,40 +102,60 @@ function removeFillSquare(event) {
 function fillSquare(event) {
     if (whoseTurnIsIt.textContent === playerOne) {
         event.target.textContent = 'X'
-    } else {
+        if (whoseTurnIsIt.textContent === playerOne && playerTwo === 'Computer') {
+            computer()
+            whoseTurnIsIt.textContent = switchPlayer()
+        }
+    } else if (whoseTurnIsIt.textContent === playerTwo) {
         event.target.textContent = 'O'
     }
-    for (let combo of Object.values(winCondition)) {
-        if (combo[0].textContent === '') {
-
-        } else if (combo[0].textContent === combo[1].textContent && combo[0].textContent === combo[2].textContent) {
-
-            winnerTitle.textContent = 'The Winner is: ' + whoseTurnIsIt.textContent + '!'
-            clearInterval(secondCounter)
-            markWinner(combo)
-            stopPlay(cellArray)
-        }
-    }
+    declareWinner()
     whoseTurnIsIt.textContent = switchPlayer()
     removeFillSquare(event)
 }
 
-function incrementSeconds(){
-    if(twoPlayerStart.disabled === true) {
-        seconds += 1
-        gameTimer.textContent = seconds
+function incrementSeconds() {
+    seconds += 1
+    if (seconds < 10) {
+        gameTimer.textContent = '0' + seconds
     } else {
-        seconds = 0
         gameTimer.textContent = seconds
     }
-
 }
 
-
+function computer() {
+    if (playerTwo === 'Computer') {
+        let compPick = cellArray[Math.floor(Math.random() * cellArray.length)]
+        while (compPick.textContent !== '') {
+            compPick = cellArray[Math.floor(Math.random() * cellArray.length)]
+            console.log(compPick)
+        }
+        compPick.textContent = 'O'
+        switchPlayer()
+        console.log(compPick)
+    }
+}
 
 
 /*--------------Event Listener Functions--------------*/
 
+onePlayerStart.addEventListener('click',
+    function () {
+        playerInputDiv.hidden = false;
+        acceptPlayerNameOne.hidden = false;
+        acceptPlayerNameTwo.hidden = true
+        onePlayerStart.disabled = true;
+        twoPlayerStart.disabled = true;
+        acceptPlayerNameOne.addEventListener('click',
+            function () {
+                playerInputOption.textContent = 'Two'
+                acceptPlayerNameTwo.hidden = true;
+                acceptPlayerNameOne.hidden = true;
+                startPlay(cellArray)
+                playerTwo = 'Computer'
+            })
+        
+    })
 
 twoPlayerStart.addEventListener('click',
     function () {
@@ -112,53 +164,63 @@ twoPlayerStart.addEventListener('click',
         acceptPlayerNameOne.hidden = false
         onePlayerStart.disabled = true;
         twoPlayerStart.disabled = true;
+        acceptPlayerNameOne.addEventListener('click',
+            function () {
+                playerInputOption.textContent = 'Two'
+                acceptPlayerNameTwo.hidden = false
+                acceptPlayerNameOne.hidden = true
+            })
+        acceptPlayerNameTwo.addEventListener('click',
+            function () {
+                playerTwo = playerName.value
+                startPlay(cellArray)
+            })
     })
 
 acceptPlayerNameOne.addEventListener('click',
     function () {
         playerInputOption.textContent = 'Two'
         playerOne = playerName.value
-        console.log(playerOne)
         playerName.value = ''
         acceptPlayerNameTwo.hidden = false
         acceptPlayerNameOne.hidden = true
+        acceptPlayerNameOne.addEventListener('click',
+            function () {
+                console.log(playerOne + 'acceptPlayerNameOne')
+                playerInputOption.textContent = 'Two'
+                acceptPlayerNameTwo.hidden = false
+                acceptPlayerNameOne.hidden = true
+                console.log(playerOne + 'bottom of accept player one')
+            })
 
     })
 
-acceptPlayerNameTwo.addEventListener('click',
-    function () {
-        playerTwo = playerName.value
-        cellArray.forEach(function (eachCell) {
-            eachCell.addEventListener('click', fillSquare)
-        })
-        console.log(playerTwo)
-        playerTurnDiv.hidden = false
-        playerInputDiv.hidden = true
-        timerDiv.hidden = false
-        secondCounter = setInterval(incrementSeconds, 1000)
-        whoseTurnIsIt.textContent = playerOne
-    })
+
 
 
 restartGame.addEventListener('click',
     function () {
-        onePlayerStart.disabled = false;
-        twoPlayerStart.disabled = false;
-        playerTurnDiv.hidden = true;
-        playerInputDiv.hidden = true;
-        timerDiv.hidden = true
-        cellArray.forEach(function (cellText) {
-            cellText.textContent = ''
-        })
-        cellArray.forEach(function (cellClass) {
-            cellClass.className = ''
-        })
-        removeFillSquare(event)
-        seconds = 0
-        gameTimer.textContent = seconds
-        whoseTurnIsIt.textContent = ''
-        winnerTitle.textContent = ''
-        playerName.value = ''
+        playerInputOption.textContent = ''
+        if (onePlayerStart.disabled === true) {
+            onePlayerStart.disabled = false;
+            twoPlayerStart.disabled = false;
+            playerTurnDiv.hidden = true;
+            playerInputDiv.hidden = true;
+            timerDiv.hidden = true
+            cellArray.forEach(function (cellText) {
+                cellText.textContent = ''
+            })
+            cellArray.forEach(function (cellClass) {
+                cellClass.className = ''
+            })
+            removeFillSquare(event)
+            seconds = 0
+            gameTimer.textContent = seconds
+            clearInterval(secondCounter)
+            whoseTurnIsIt.textContent = ''
+            winnerTitle.textContent = ''
+            playerName.value = ''
+        } else { }
     })
 
 
@@ -168,29 +230,3 @@ restartGame.addEventListener('click',
 playerTurnDiv.hidden = true
 playerInputDiv.hidden = true
 timerDiv.hidden = true
-
-
-
-
-
-
-// function sayMagicWord(event) {
-//         if (event.target === prestoButton) { //event.target will focus on what is being clicked on!
-//                 alert('Change-o!');
-//             } else if (event.target === abraButton) {
-//                 alert('Cadabra!');
-//             } else {
-//                 alert('Shazam!');
-//             }
-//             console.log({ event }); // for debugging
-//         }
-
-//         prestoButton.addEventListener('click', function(event){
-//             alert(event.target.textContent)
-//         })
-//         abraButton.addEventListener('click', sayMagicWord)
-//         genieButton.addEventListener('click', sayMagicWord)
-
-
-
-//set interval is a call back function to keep in mind when starting to create my timer for the game.
