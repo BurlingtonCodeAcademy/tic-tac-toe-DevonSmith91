@@ -11,26 +11,39 @@
 
 <body>
   <h2>Tic Tac Toe</h2>
+  <h3 id='winner'></h3>
+  <div id='timerDiv'>Elapsed Time: <span id='timer'>00</span> Seconds</div>
+  <div id='playerInput'>
+    <label for="playerName">Player <span id="whichPlayer" ></span> Name:</label>
+    <input type="text" id="playerName" name="fname">
+    <button id="acceptOne" type="button">Accept</button><button id="acceptTwo" type="button">Accept</button>
+  </div>
+  <div id='playerTurn'>
+    <p>Player Turn: <span id='turnStatus'></span></p>
+  </div>
   <div class="board">
     <div id="row-1">
-      <div id="cell-0"></div>
       <div id="cell-1"></div>
       <div id="cell-2"></div>
+      <div id="cell-3"></div>
     </div>
     <div id="row-2">
-      <div id="cell-3"></div>
       <div id="cell-4"></div>
       <div id="cell-5"></div>
+      <div id="cell-6"></div>
     </div>
     <div id="row-3">
-      <div id="cell-6"></div>
       <div id="cell-7"></div>
       <div id="cell-8"></div>
+      <div id="cell-9"></div>
     </div>
   </div>
 
   <div class="status">
-    <button id="start" type="button">Start Game</button>
+    <button id="onePlayer" type="button">One Player</button>
+    <button id="twoPlayer" type="button">Two Player</button>
+    <br />
+    <button id="restart" type="button">Restart</button>
   </div>
   <script src="main.js"></script>
 </body>
